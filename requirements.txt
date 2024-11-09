@@ -3,3 +3,4 @@ uvicorn
 pyodbc
 sentence-transformers
 torch
+accelerate
