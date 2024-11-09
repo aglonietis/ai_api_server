@@ -46,8 +46,12 @@ connection_string = (
 idea_data = {
     "rows": [],
 }
+
+objectives = {
+    "questions": [],
+    "embeddings": [],
+}
 sentence_similarity_model = None
-llm_model_pipeline = None
 
 # Function to load ideas from the database and store embeddings in memory
 
@@ -84,27 +88,31 @@ def load_ideas():
         idea_data["embeddings"] = torch.nn.functional.normalize(idea_data["unnormalized_embeddings"], p=2, dim=1)
     logger.info("Ideas: loaded")
 
-def load_llm():
-    logger.info("LLM: loading")
-    llm_model = "./models/Llama-3.2-1B"
+def load_objectives():
+    logger.info("Objectives: loading")
 
-    global llm_pipeline
-    llm_pipeline = pipeline(
-        "text-generation",
-        model=llm_model,
-        torch_dtype=torch.bfloat16,
-        device_map="auto"
-    )
+    global objectives
 
-    logger.info("LLM: loaded")
+    objectives["objectives"] = [
+        "Specific issue or improvement that aims to address operations and contributes to overall goals",
+        "Findgrid operations, processes, grid reliability or energy market would be impacted. Influence area or broadness",
+        "Resources are necessary for implementation, including manpower, technology and equipment. Specific tools and skills.",
+    ]
+    objectives["questions"] = [
+        "Can you clarify the main objective and the specific problem it is trying to solve?",
+        "Can you provide more details on areas or processes it will affect?",
+        "What resources (personel, technology or equipment) are required to implement this idea?"
+    ]
 
-# load_ideas()
+    objectives["unnormalized_embeddings"] = sentence_similarity_model.encode(objectives["objectives"], convert_to_tensor=True)
+    # Normalize embeddings to unit vectors for cosine similarity
+    objectives["embeddings"] = torch.nn.functional.normalize(objectives["unnormalized_embeddings"], p=2, dim=1)
 
 @app.on_event("startup")
 def startup_event():
     load_idea_similarity_comparison_model()
     load_ideas()
-    load_llm()
+    load_objectives()
 
 # Data model for incoming similarity request
 class IdeaRequest(BaseModel):
@@ -131,7 +139,14 @@ async def get_ideas_similarity(request: IdeaRequest):
         } for idx in sorted_indices[:3]
     ]
 
+    objective_similarities = util.cos_sim(input_embedding, objectives["embeddings"]).squeeze()
+    filtered_indices = torch.where(objective_similarities <= 0.25)[0]
+
+    questions_to_ask = [
+        objectives["questions"][idx] for idx in filtered_indices
+    ]
+
     return {
         "data": top_3_suggestions,
-        "llm_suggestion": llm_pipeline("The key to life is"),
+        "questions_to_ask": questions_to_ask,
     }

@@ -18,3 +18,12 @@ Copy .env.example to .env and edit the API_PORT
 
 Llama Model safe tensors file has been excluded
 
+Can be downloaded again and moved into the folder with:
+
+```
+hugginface-cli login
+huggingface-cli download meta-llama/Llama-3.2-1B-Instruct --local-dir app/models/Llama-3.2-1B-Instruct
+
+
+```
+
