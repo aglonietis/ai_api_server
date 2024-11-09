@@ -1,0 +1,16 @@
+# docker-compose.yml
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app  # Mounts the local "app" directory to "/app" in the container
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+#    environment:
+#      - DB_CONNECTION_STRING="DRIVER={ODBC Driver 17 for SQL Server};SERVER=db;DATABASE=YourDatabaseName;UID=sa;PWD=YourPassword"
