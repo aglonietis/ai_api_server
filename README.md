@@ -16,14 +16,10 @@ If you have 8000 port already used then
 
 Copy .env.example to .env and edit the API_PORT
 
-Llama Model safe tensors file has been excluded
+# Related repositories
 
-Can be downloaded again and moved into the folder with:
-
-```
-hugginface-cli login
-huggingface-cli download meta-llama/Llama-3.2-1B-Instruct --local-dir app/models/Llama-3.2-1B-Instruct
-
-
-```
+This is one of 3 repositories:
+1. This repository that provides API that uses AI models for suggesting similar ideas already in the system
+2. Frontend repository that is written in next.js and react. It provides beautiful UI for Idea system managing. Link: [https://github.com/mikusmikus/fingrid-frontend](https://github.com/mikusmikus/fingrid-frontend) 
+3. Backend API that is the core of the system and handles data and the workflows. Link: [https://github.com/mikusmikus/fingrid-frontend](https://github.com/mikusmikus/fingrid-frontend)
 
