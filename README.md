@@ -21,5 +21,8 @@ Copy .env.example to .env and edit the API_PORT
 This is one of 3 repositories:
 1. This repository that provides API that uses AI models for suggesting similar ideas already in the system
 2. Frontend repository that is written in next.js and react. It provides beautiful UI for Idea system managing. Link: [https://github.com/mikusmikus/fingrid-frontend](https://github.com/mikusmikus/fingrid-frontend) 
-3. Backend API that is the core of the system and handles data and the workflows. Link: [https://github.com/mikusmikus/fingrid-frontend](https://github.com/mikusmikus/fingrid-frontend)
+3. Backend API that is the core of the system and handles data and the workflows. Link: https://github.com/snoge-IF/FinGriddy.Api](https://github.com/snoge-IF/FinGriddy.Api)
 
+# IMPORTANT
+
+AI SERVER MUST BE RELOADED FOR NEWEST QUESTIONS TO BE LOADED INTO THE AI SUGGESTOR
